@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Style Search</title>
+
+  <style>
+    #suggestions {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ddd;
+      width: 40%;
+      z-index: 2000;
+      border-radius: 5px;
+    }
+
+    .suggest-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggest-item:hover {
+      background: #f2f2f2;
+    }
+
+    .result-card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h1>Google Style Live Search</h1>
+
+  <input 
+    type="text" 
+    id="searchInput"
+    placeholder="Search anything..."
+    style="width:40%; padding:10px; font-size:16px;"
+    value="<%= q %>"
+  />
+
+  <div id="suggestions"></div>
+
+  <hr>
+
+  <h2>Search Results</h2>
+
+  <% listings.forEach(list => { %>
+    <div class="result-card">
+      <h3><%= list.title %></h3>
+      <p><strong>Location:</strong> <%= list.location %></p>
+      <p><strong>Country:</strong> <%= list.country %></p>
+      <p><strong>Category:</strong> <%= list.category %></p>
+    </div>
+  <% }) %>
+
+
+  <script>
+    const input = document.getElementById("searchInput");
+    const box = document.getElementById("suggestions");
+
+    input.addEventListener("keyup", async () => {
+      const query = input.value.trim();
+
+      if (query === "") {
+        box.innerHTML = "";
+        return;
+      }
+
+      const res = await fetch(`/live-search?q=${query}`);
+      const data = await res.json();
+
+      box.innerHTML = data
+        .map(item => `
+          <div class="suggest-item">
+            <strong>${item.title}</strong> — <small>${item.location}</small>
+          </div>
+        `)
+        .join("");
+    });
+  </script>
+
+</body>
+</html>

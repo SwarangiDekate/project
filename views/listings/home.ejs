@@ -1,0 +1,23 @@
+<% layout("/layout/boilerplate.ejs") %>
+
+<h3 class="mb-4">Featured Listings</h3>
+
+<div class="row g-4">
+  <% Listings.slice(0, 6).forEach(listing => { %>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm rounded-3">
+        <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+          <img 
+            src="<%= listing.image %>" 
+            alt="<%= listing.title %>" 
+            class="card-img-top" 
+            style="object-fit: cover; height: 20rem;">
+          <div class="card-body">
+            <h5 class="card-title"><%= listing.title %></h5>
+            <p class="card-text"><strong>Price:</strong> ₹<%= listing.price %> / night</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  <% }) %>
+</div>
